@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>孔祥暐 IG 私訊生存記：我人會到的你放心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #000000;
+      color: #f5f5f5;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 3px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    @keyframes bubbleIn {
+      0% { opacity: 0; transform: translateY(6px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .bubble-anim {
+      animation: bubbleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+      40% { transform: translateY(-3px); opacity: 1; }
+    }
+    .typing-dot:nth-child(1) { animation: dotBounce 1.2s infinite ease-in-out 0s; }
+    .typing-dot:nth-child(2) { animation: dotBounce 1.2s infinite ease-in-out 0.2s; }
+    .typing-dot:nth-child(3) { animation: dotBounce 1.2s infinite ease-in-out 0.4s; }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 1; transform: translateY(-5px); }
+      80% { opacity: 1; transform: translateY(-14px); }
+      100% { opacity: 0; transform: translateY(-22px); }
+    }
+    .float-toast {
+      animation: floatUp 1.6s ease-out forwards;
+    }
+
+    /* Instagram 漸層紫氣泡 */
+    .ig-user-bubble {
+      background: linear-gradient(135deg, #7000ff, #a800ff);
+      color: #ffffff;
+    }
+    /* Instagram 對方深灰氣泡 */
+    .ig-peer-bubble {
+      background: #262626;
+      color: #f5f5f5;
+    }
+    .phone-container {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 25px 60px -15px rgba(0, 0, 0, 0.95);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-4 overflow-hidden bg-[#0a0a0a]">
+
+  <!-- 主機台容器 (完美 1:1 復刻 Instagram 私訊介面) -->
+  <div class="relative w-full sm:max-w-[430px] h-[100dvh] sm:h-[95vh] sm:max-h-[890px] bg-[#000000] sm:rounded-[44px] phone-container flex flex-col overflow-hidden border border-neutral-900 z-10">
+
+    <!-- iPhone 狀態列 -->
+    <div class="pt-3 px-6 pb-1 bg-black flex justify-between items-center text-xs text-neutral-300 font-medium z-40 select-none">
+      <span id="os-clock" class="font-semibold tracking-tight">23:18</span>
+      
+      <!-- 動態島 -->
+      <div id="dynamic-island" class="w-24 h-4.5 bg-neutral-950 rounded-full flex items-center justify-between px-2 shadow-inner border border-neutral-900">
+        <span class="text-[8px] text-neutral-400 font-mono tracking-tighter" id="island-text">Instagram</span>
+        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+      </div>
+
+      <div class="flex items-center space-x-1.5 text-neutral-400">
+        <span class="text-[10px] font-bold text-neutral-200">5G</span>
+        <!-- 音效切換 -->
+        <button id="sound-btn" onclick="toggleSound()" class="hover:text-white transition p-0.5 text-[11px]">🔊</button>
+        <!-- 電量顯示 (38%) -->
+        <div class="flex items-center space-x-1">
+          <span class="text-[10px] font-semibold text-neutral-200">38</span>
+          <div class="w-5 h-2.5 border border-neutral-400 rounded-sm p-[1px] flex items-center">
+            <div class="h-full bg-neutral-200 rounded-xs w-2/5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 頂部即時心理數值條 (隱藏式 RPG 儀表板) -->
+    <div class="px-4 py-1.5 bg-[#121212] border-b border-[#262626] flex items-center justify-between text-xs z-30 select-none">
+      <div class="flex items-center space-x-3 text-[11px]">
+        <div>🧠 理智 <span id="val-san" class="font-bold text-emerald-400">100</span></div>
+        <div>🎓 學分 <span id="val-gpa" class="font-bold text-sky-400">100</span></div>
+        <div>🦹 寄生度 <span id="val-parasite" class="font-bold text-rose-400">15%</span></div>
+      </div>
+      <div class="text-[10px] text-neutral-400 font-mono" id="round-indicator">第 1/11 幕</div>
+    </div>
+
+    <!-- Instagram Direct 頂部導航欄 (1:1 復刻截圖) -->
+    <div class="px-3 py-2 bg-black border-b border-[#262626]/80 flex items-center justify-between z-30 select-none">
+      <div class="flex items-center space-x-2.5">
+        <button onclick="showToast('你正在與孔祥暐對話中')" class="text-neutral-200 hover:text-white text-lg p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <!-- 頭像 (截圖同款動漫高校男生頭像) -->
+        <div class="relative">
+          <div class="w-9 h-9 rounded-full overflow-hidden ring-1 ring-neutral-700 bg-neutral-800 flex items-center justify-center">
+            <img src="avatar.jpg" alt="孔祥暐" class="w-full h-full object-cover scale-[1.08]">
+          </div>
+          <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-black"></div>
+        </div>
+
+        <!-- 名稱與帳號 -->
+        <div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold text-sm text-white tracking-tight">孔祥暐</span>
+            <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          <div class="text-[11px] text-neutral-400 leading-tight">willyk0114</div>
+        </div>
+      </div>
+
+      <!-- 右側功能圖示 (貼紙/電話/標籤) -->
+      <div class="flex items-center space-x-3.5 text-neutral-200">
+        <button class="hover:text-white" onclick="showToast('孔哥剛剛已讀了你的訊息')">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+        <button class="hover:text-white" onclick="triggerKongCall()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+        </button>
+        <button class="hover:text-white" onclick="openLoreModal()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 浮動提示 (Toast) -->
+    <div id="toast-container" class="absolute top-28 left-0 right-0 pointer-events-none flex flex-col items-center z-50 space-y-1"></div>
+
+    <!-- Instagram 訊息流區域 (可滾動) -->
+    <div id="chat-box" class="custom-scroll flex-1 p-3.5 overflow-y-auto space-y-3 bg-black relative">
+      <!-- 訊息由 JS 動態生成 -->
+    </div>
+
+    <!-- 滾動至底部小按鈕 (截圖同款 ↓) -->
+    <button id="btn-scroll-down" onclick="scrollToBottom()" class="hidden absolute bottom-44 right-4 w-7 h-7 bg-[#262626] rounded-full border border-neutral-700 text-neutral-300 flex items-center justify-center text-xs shadow-lg z-20 hover:text-white">
+      ↓
+    </button>
+
+    <!-- 輸入中提示 (Typing Indicator) -->
+    <div id="typing-indicator" class="hidden px-4 py-1 flex items-center space-x-2 text-xs text-neutral-400 z-20">
+      <div class="w-5 h-5 rounded-full overflow-hidden bg-neutral-800 flex items-center justify-center"><img src="avatar.jpg" alt="孔" class="w-full h-full object-cover scale-[1.08]"></div>
+      <div class="flex space-x-1 items-center bg-[#262626] px-3 py-1.5 rounded-2xl rounded-bl-none">
+        <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full typing-dot"></span>
+        <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full typing-dot"></span>
+        <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full typing-dot"></span>
+      </div>
+    </div>
+
+    <!-- 決策選項抽屜 (仿 IG 回覆建議按鈕) -->
+    <div class="p-2.5 bg-[#121212] border-t border-[#262626] z-30">
+      <div class="text-[10px] text-neutral-400 mb-1.5 flex justify-between items-center px-1">
+        <span class="flex items-center gap-1 font-medium">💬 你的回應策略：</span>
+        <span class="text-neutral-500 text-[9px]">文化大傳 · 巨嬰應對戰</span>
+      </div>
+      <div id="choices-container" class="space-y-1.5">
+        <!-- 選項按鈕 -->
+      </div>
+    </div>
+
+    <!-- Instagram 底部訊息發送條 (1:1 復刻底欄) -->
+    <div class="px-3 py-2 bg-black border-t border-[#262626]/60 flex items-center space-x-2 z-30 select-none">
+      <button class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#7000ff] to-[#a800ff] text-white flex items-center justify-center shrink-0 shadow">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+          <circle cx="12" cy="13" r="3" stroke-width="2" />
+        </svg>
+      </button>
+
+      <div class="flex-1 bg-[#1f1f1f] rounded-full px-3.5 py-1.5 flex items-center justify-between text-xs border border-neutral-800">
+        <span class="text-neutral-500 text-[13px]">發送訊息......</span>
+        <div class="flex items-center space-x-2 text-neutral-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+          </svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 結算彈窗 (IG 故事風格 Modal) -->
+    <div id="gameover-modal" class="hidden absolute inset-0 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-50">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-xl" id="modal-badge">
+        🏆
+      </div>
+      <h2 id="modal-title" class="text-2xl font-black mb-1 tracking-tight text-white">結算標題</h2>
+      <p id="modal-subtitle" class="text-xs text-neutral-400 mb-4 px-2">副標題描寫</p>
+
+      <div class="w-full bg-[#1c1c1e] rounded-2xl border border-neutral-800 p-4 text-left space-y-2 mb-4 text-xs">
+        <div class="flex justify-between border-b border-neutral-800 pb-1.5">
+          <span class="text-neutral-400">生存評級</span>
+          <span id="res-rank" class="font-bold text-amber-400 text-sm">S 級</span>
+        </div>
+        <div class="flex justify-between border-b border-neutral-800 pb-1.5">
+          <span class="text-neutral-400">大紅袍出招次數</span>
+          <span id="res-hongpao" class="font-bold text-white">1 次</span>
+        </div>
+        <div class="flex justify-between border-b border-neutral-800 pb-1.5">
+          <span class="text-neutral-400">偽造文書連坐防禦</span>
+          <span id="res-forgery" class="font-bold text-emerald-400">完美避險</span>
+        </div>
+        <div class="pt-1 text-neutral-300 italic text-[11px] leading-relaxed bg-black/80 p-2.5 rounded-xl border border-neutral-800" id="res-quote">
+          「他人即地獄 —— 讓巨嬰的歸巨嬰，你的歸基隆客運。」
+        </div>
+      </div>
+
+      <div class="flex gap-2 w-full">
+        <button onclick="copyReport()" class="flex-1 py-2.5 px-3 bg-[#2c2c2e] hover:bg-[#3a3a3c] text-white rounded-xl text-xs font-semibold border border-neutral-700 transition">
+          📋 複製 IG 戰報
+        </button>
+        <button onclick="restartGame()" class="flex-1 py-2.5 px-3 bg-gradient-to-r from-[#7000ff] to-[#a800ff] hover:opacity-90 text-white rounded-xl text-xs font-semibold shadow-md transition">
+          🔄 重新通關
+        </button>
+      </div>
+    </div>
+
+    <!-- 人物與心法手冊 (Lore Modal) -->
+    <div id="lore-modal" class="hidden absolute inset-0 bg-black/95 backdrop-blur-md flex flex-col p-5 z-50">
+      <div class="flex items-center justify-between pb-3 border-b border-neutral-800 mb-3">
+        <h3 class="font-bold text-white text-sm flex items-center gap-1.5">📖 孔哥人物誌與沙特心法</h3>
+        <button onclick="closeLoreModal()" class="text-neutral-400 hover:text-white text-xs font-bold px-2.5 py-1 bg-[#262626] rounded-lg">關閉</button>
+      </div>
+      <div class="flex-1 overflow-y-auto custom-scroll space-y-3 text-xs">
+        
+        <div class="p-3.5 rounded-2xl bg-[#1c1c1e] border border-neutral-800 space-y-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-full overflow-hidden border border-neutral-700 shrink-0">
+              <img src="avatar.jpg" alt="孔祥暐" class="w-full h-full object-cover scale-[1.08]">
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-amber-400 text-sm">孔哥（孔祥暐）</span>
+                <span class="text-[9px] px-2 py-0.5 bg-amber-950 text-amber-300 rounded-full border border-amber-800">特權型巨嬰</span>
+              </div>
+              <div class="text-[10px] text-neutral-400 font-mono">@willyk0114</div>
+            </div>
+          </div>
+          <p class="text-neutral-300 text-[11px] leading-relaxed">
+            <b>核心行為模式：</b>
+            生活機能全面外包。吃早餐怪別人不揪、佔位要越後面越好、點餐要別人「你等我我快好了」、上課要人「先幫我簽一下我人會到你放心」、報告要「所以確定交給你就好了嗎？」、點完名嘆「好吧，這我認了」。
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-[#1c1c1e] border border-neutral-800 space-y-1.5">
+          <div class="font-bold text-rose-400 text-sm">文化大學人物誌</div>
+          <ul class="text-neutral-300 text-[11px] space-y-1 leading-relaxed">
+            <li>• <b>李明凱教授：</b> 全場對人頭抓代簽，抓到以刑法第 210 條偽造私文書精神連坐送懲戒會。</li>
+            <li>• <b>詹佳文老師：</b> 深夜未接來電質問「詹佳文期中到底要搞什麼」。</li>
+            <li>• <b>純德老師：</b> 有關兩性報告，孔哥打探「純德期中要什麼時候繳？水感謝」。</li>
+            <li>• <b>基哥 / 繼革：</b> 要去交換被孔哥情勒「我們是不是該吃個飯，他上來搭飛機呀你搞笑啊」。</li>
+            <li>• <b>陳記：</b> 孔哥點名被記後隔天依然問「陳記？」。</li>
+          </ul>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-800/60 space-y-1.5">
+          <div class="font-bold text-indigo-300 text-sm">沙特存在主義指南</div>
+          <p class="text-neutral-300 text-[11px] leading-relaxed">
+            <b>他人即地獄：</b> 面對巨嬰將你客體化為外包工具，唯有保持「灰石冷靜」與客觀現實絕殺（「有的」「有的」「全班的」），方能打破其特權幻想。
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* =========================================================
+     *  Web Audio API 音效合成引擎
+     * ========================================================= */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+      }
+      tone(freq, type = 'sine', duration = 0.15, vol = 0.15) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(vol, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      }
+      playMsgIn() { this.tone(660, 'sine', 0.08, 0.15); setTimeout(() => this.tone(880, 'sine', 0.1, 0.12), 50); }
+      playMsgOut() { this.tone(440, 'sine', 0.07, 0.12); setTimeout(() => this.tone(330, 'sine', 0.09, 0.1), 40); }
+      playHit() { this.tone(140, 'sawtooth', 0.35, 0.28); this.tone(90, 'triangle', 0.45, 0.3); }
+      playRing() { [480, 440].forEach((f, i) => setTimeout(() => this.tone(f, 'sine', 0.3, 0.2), i * 120)); }
+      playGameOver() { [260, 190, 120].forEach((f, i) => setTimeout(() => this.tone(f, 'sawtooth', 0.25, 0.22), i * 110)); }
+      playVictory() { [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => this.tone(f, 'triangle', 0.2, 0.15), i * 90)); }
+    }
+    const sound = new SoundEngine();
+
+    function toggleSound() {
+      sound.enabled = !sound.enabled;
+      document.getElementById('sound-btn').textContent = sound.enabled ? '🔊' : '🔇';
+      showToast(sound.enabled ? '🔊 音效已開啟' : '🔇 已靜音');
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('os-clock').textContent = `${h}:${m}`;
+    }
+    setInterval(updateClock, 30000);
+    updateClock();
+
+    function triggerKongCall() {
+      sound.playRing();
+      showToast('📞 孔祥暐 正在撥打語音通話...');
+    }
+
+    /* =========================================================
+     *  全套真實 11 幕 IG 私訊戰役（完整覆蓋 10 張真實截圖！）
+     * ========================================================= */
+    const CHAPTERS = [
+      /* 幕 1：學餐自助餐之「都不等的 難過了」（新截圖 4 實錄） */
+      {
+        round: 1,
+        time: '週一 08:20',
+        systemBanner: '📍 你早早抵達大義館學餐，拍了地板紅線照片傳到限動...',
+        openingEvents: [
+          { type: 'user_img', text: '📷 學餐走道紅線地磚照片' },
+          { type: 'peer', text: '沃草你這麼早到幹嘛' }
+        ],
+        choices: [
+          {
+            title: '🍙 老實回覆：餓了 / 是的咧',
+            tag: '日常受虐',
+            effectPreview: 'SAN -15 / 寄生度 +10%',
+            action: async () => {
+              await sendUserMsg('餓了');
+              await showTyping(900);
+              await sendPeerMsg('都不等的');
+              await sendPeerMsg('難過了');
+              await sendPeerMsg('所以你要吃自助餐？');
+              await sendUserMsg('是的咧');
+              await showTyping(900);
+              await sendPeerMsg('啊你這麼早來幹嘛');
+              await sendUserMsg('早上有化學課');
+              await showTyping(800);
+              await sendPeerMsg('我去');
+              await sendPeerMsg('啊你吃了？');
+              applyStats(-15, 0, +10, '早到吃早餐也要被孔哥道德審查！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🪨 灰石敷衍：「有課」',
+            tag: '灰石正解',
+            effectPreview: 'SAN +5 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('有課');
+              await showTyping(800);
+              await sendPeerMsg('都不等的 難過了');
+              await sendUserMsg('你慢慢睡');
+              sound.playHit();
+              applyStats(+5, 0, -5, '俐落結束對話，安心吃早餐。');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 2：炒飯改小籠包與「你等我 我快好了」（新截圖 5 實錄） */
+      {
+        round: 2,
+        time: '週二 12:15',
+        openingEvents: [
+          { type: 'peer', text: '你在哪' }
+        ],
+        choices: [
+          {
+            title: '🥟 報備行程：炒飯改小籠包',
+            tag: '被動等待',
+            effectPreview: 'SAN -20 / 寄生度 +15%',
+            action: async () => {
+              await sendUserMsg('炒飯');
+              await sendImgMsg('🥟 餃子館內排隊照片');
+              await showTyping(900);
+              await sendPeerMsg('不揪');
+              await sendPeerMsg('你點了？');
+              await sendUserMsg('還沒');
+              await sendUserMsg('改小籠包');
+              await showTyping(1000);
+              await sendPeerMsg('你等我');
+              await sendPeerMsg('我快好了');
+              await sendUserMsg('可以');
+              await sendSystemNotice('—— 35 分鐘後，孔哥才慢悠悠走進店裡 ——');
+              applyStats(-20, 0, +15, '「我快好了」等於至少半小時！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🏃 聲東擊西：「快吃完了準備去上課」',
+            tag: '迅速脫身',
+            effectPreview: 'SAN +10 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('快吃完了準備進教室');
+              await showTyping(800);
+              await sendPeerMsg('不揪 幹');
+              sound.playHit();
+              applyStats(+10, 0, -5, '成功避開在店裡枯等孔哥！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 3：器材懂哥大考驗（假電、1to4、970 電池） */
+      {
+        round: 3,
+        time: '週一 00:01',
+        systemBanner: '🎥 孔哥深夜發起影視器材懂哥大考驗...',
+        openingEvents: [
+          { type: 'peer', text: '用假電的話你知道要加什麼器材嗎' }
+        ],
+        choices: [
+          {
+            title: '🛠️ 完美對答：小 v 背板 甲店',
+            tag: '器材大師',
+            effectPreview: 'SAN +10 / 寄生度 +0%',
+            action: async () => {
+              await sendUserMsg('小 v 背板 甲店');
+              await showTyping(900);
+              await sendPeerMsg('不錯');
+              await sendPeerMsg('但少一個');
+              await sendPeerMsg('從小 V 電出來要有一個 1to4 的轉接');
+              await sendPeerMsg('我們螢幕、圖傳要吃誰的電？', true);
+              await sendUserMsg('我們借的圖傳螢幕合在一起的');
+              await showTyping(1000);
+              await sendPeerMsg('那螢幕的電視要從 v 掛還是再給他一個電池？');
+              await sendUserMsg('背面可以插 970');
+              await showTyping(1100);
+              await sendPeerMsg('還是他也搞個假電，這樣假如要上穩定器也可以比較輕一點');
+              await sendUserMsg('承重還夠');
+              await showTyping(1000);
+              await sendPeerMsg('我意思是說這樣拿比較不會累，而且還可以省幾顆 970 電池');
+              applyStats(+10, 0, 0, '影視器材完美過關！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🤷 冷淡推託：「問器材室工讀生」',
+            tag: '灰石防守',
+            effectPreview: 'SAN +5 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('不知道 你去問器材室');
+              await showTyping(800);
+              await sendPeerMsg('靠北 都不關心劇組');
+              applyStats(+5, 0, -5, '避開深夜器材喋喋不休。');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 4：深夜奪命未接來電（詹佳文期中） */
+      {
+        round: 4,
+        time: '週三 21:12',
+        openingEvents: [
+          { type: 'call', title: '語音通話 晚上 9:12', missed: true },
+          { type: 'time', text: '週三 22:13' },
+          { type: 'peer', text: '靠北我剛剛是不是按到了' },
+          { type: 'peer', text: '誒誒誒' },
+          { type: 'peer', text: '詹佳文期中到底要搞什麼' },
+          { type: 'call', title: '語音通話 晚上 10:19', missed: true }
+        ],
+        choices: [
+          {
+            title: '📞 立刻回電：聽他抱怨詹佳文',
+            tag: '被迫陪聊',
+            effectPreview: 'SAN -30 / 寄生度 +20%',
+            action: async () => {
+              sound.playRing();
+              await sendSystemNotice('—— 你回電給孔哥，聽他抱怨詹佳文整整 48 分鐘 ——');
+              await sendPeerMsg('反正就是那樣啦，那你再幫我整理成筆記傳我');
+              applyStats(-30, 0, +20, '深夜奪命連環叩折磨殆盡！');
+              nextChapter();
+            }
+          },
+          {
+            title: '💬 文字簡答：「看 TronClass 大綱」',
+            tag: '灰石正解',
+            effectPreview: 'SAN +10 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('TronClass 上有教學大綱自己去下載看');
+              await showTyping(900);
+              await sendPeerMsg('幾把 系統我登不進去啊');
+              await sendUserMsg('密碼忘記去找圖資處');
+              sound.playHit();
+              applyStats(+10, 0, -5, '絕不替巨嬰查大綱！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 5：期中情報吸血（純德兩性報告） */
+      {
+        round: 5,
+        time: '週三 10:13',
+        openingEvents: [
+          { type: 'sticker', content: '🎂 3D Memoji 捧生日蛋糕貼圖' },
+          { type: 'peer', text: '純德的期中我記得好像是有關兩性的報告沒錯吧' },
+          { type: 'peer', text: '阿那個是要什麼時候繳？' }
+        ],
+        choices: [
+          {
+            title: '🤐 老實解答：期末才繳',
+            tag: '老實人白嫖',
+            effectPreview: 'SAN -15 / 寄生度 +10%',
+            action: async () => {
+              await sendUserMsg('期末');
+              await showTyping(900);
+              await sendPeerMsg('所以期中啥都不用？');
+              await sendUserMsg('不用');
+              await showTyping(800);
+              await sendPeerMsg('水感謝');
+              await sendPeerMsg('阿怎麼沒看到你');
+              applyStats(-15, 0, +10, '孔哥白嫖了情報，繼續在被窩躺平！');
+              nextChapter();
+            }
+          },
+          {
+            title: '😈 惡搞情報：「這週五交一萬字紙本」',
+            tag: '反客為主',
+            effectPreview: 'SAN +15 / 寄生度 -10%',
+            action: async () => {
+              await sendUserMsg('這週五下課前要繳紙本一萬字，純德上週說的');
+              sound.playHit();
+              await showTyping(1200);
+              await sendPeerMsg('幹真假？？？');
+              await sendPeerMsg('我操完了 我一個字都沒寫');
+              await sendUserMsg('開玩笑的 期末才要交');
+              applyStats(+15, 0, -10, '成功整蠱巨嬰！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 6：午餐義大利麵與「12.大紅袍」 */
+      {
+        round: 6,
+        time: '週四 10:50',
+        openingEvents: [
+          { type: 'peer', text: '今天該義大利麵了吧' },
+          { type: 'peer', text: '那你快 12.前先去佔位？' }
+        ],
+        choices: [
+          {
+            title: '🍵 祭出終極大招：「12.大紅袍」',
+            tag: '經典暴擊',
+            effectPreview: 'SAN +20 / 寄生度 -15% / 話題強制石化',
+            action: async () => {
+              state.hongpaoCount++;
+              await sendUserMsg('12.大紅袍');
+              sound.playHit();
+              await showTyping(1100);
+              await sendPeerMsg('啊你今天怎麼帶相機');
+              await sendUserMsg('記錄生活');
+              await showTyping(900);
+              await sendPeerMsg('你別騙了');
+              await sendUserMsg('真的');
+              await showTyping(900);
+              await sendPeerMsg('哎呦你剪頭髮了');
+              await sendUserMsg('是的咧');
+              applyStats(+20, 0, -15, '💥 經典大紅袍暴擊！孔哥話題徹底石化！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🏃 順從答應提早去排隊',
+            tag: '跑腿僕人',
+            effectPreview: 'SAN -30 / 寄生度 +25%',
+            action: async () => {
+              await sendUserMsg('可以');
+              await sendSystemNotice('—— 12:05 你頂著大太陽在義大利麵店門口等 ——');
+              applyStats(-30, 0, +25, '淪為陪吃跑腿小弟！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 7：責任外包終極陷阱（李明凱期中作業） */
+      {
+        round: 7,
+        time: '週二 22:17',
+        openingEvents: [
+          { type: 'peer', text: 'ㄟㄟ阿李明凱她期中是要搞什麼', edited: true }
+        ],
+        choices: [
+          {
+            title: '🤦 踩中死穴：「我處理一下」',
+            tag: '終極甩鍋成立',
+            effectPreview: '寄生度 +40% / 揹全組黑鍋',
+            action: async () => {
+              await sendUserMsg('我處理一下');
+              await showTyping(900);
+              await sendPeerMsg('所以確定交給你就好了嗎？');
+              sound.playHit();
+              await sendSystemNotice('🚨 慘遭巨嬰徹底將整份期中作業外包給你！');
+              applyStats(-40, 0, +40, '「所以確定交給你就好了嗎？」甩鍋成立！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🛡️ 嚴正切割：「各自做各自的」',
+            tag: '灰石正解',
+            effectPreview: 'SAN +10 / 寄生度 -10%',
+            action: async () => {
+              await sendUserMsg('老師說這堂課沒有分組，每個人各自繳交一份剪輯');
+              await showTyping(1100);
+              await sendPeerMsg('幹 真的假的啊 那借我參考');
+              await sendUserMsg('我還沒做');
+              sound.playHit();
+              applyStats(+10, 0, -10, '成功化解全組外包危機！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 8：突發護照個資索取與急件代辦（新截圖 3 實錄） */
+      {
+        round: 8,
+        time: '週四 11:39',
+        systemBanner: '📋 語音通話剛結束，孔哥突然發送大篇幅表格要求填寫...',
+        openingEvents: [
+          { type: 'call_ended', title: '語音通話已結束 上午 11:39' },
+          { type: 'peer', text: '姓名、護照英文名：\n地址：\n電話：\n護照號碼：\nemail：\n身分證：\n出生年月日：\n哪個國家？幾號到幾號？時間？：' },
+          { type: 'peer', text: '假如你朋友需要也傳這給他' },
+          { type: 'peer', text: '時間上要快喔' }
+        ],
+        choices: [
+          {
+            title: '📋 乖乖雙手奉上全部個資',
+            tag: '個資外洩陷阱',
+            effectPreview: 'SAN -20 / 寄生度 +20%',
+            action: async () => {
+              await sendUserMsg('（填寫完整個資送出）');
+              await showTyping(900);
+              await sendPeerMsg('收到，再幫我找三個人填喔');
+              applyStats(-20, 0, +20, '淪為孔哥業務代辦工具人！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🛑 果斷拒絕：「我自己上網保就好」',
+            tag: '保護邊界',
+            effectPreview: 'SAN +10 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('不用了 我自己網路上投保完了 謝謝');
+              await showTyping(800);
+              await sendPeerMsg('行吧 不早說');
+              sound.playHit();
+              applyStats(+10, 0, -5, '俐落守住個資與邊界！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 9：基哥交換吃飯情勒之「你搞笑啊」（新截圖 2 實錄） */
+      {
+        round: 9,
+        time: '週五 14:30',
+        openingEvents: [
+          { type: 'peer', text: '有找到打工嗎？' }
+        ],
+        choices: [
+          {
+            title: '✈️ 據實以告：待業中 25 去大阪',
+            tag: '截圖同款情勒',
+            effectPreview: 'SAN -15 / 寄生度 +10%',
+            action: async () => {
+              await sendUserMsg('待業中 25 去大阪');
+              await showTyping(800);
+              await sendPeerMsg('又不揪');
+              await sendPeerMsg('啊你怎麼都沒來文化找我們');
+              await sendUserMsg('一點點遠');
+              await showTyping(1000);
+              await sendPeerMsg('啊基哥要之後要去交換');
+              await sendPeerMsg('我們是不是該吃個飯');
+              await sendUserMsg('確實 線上的吧 繼革在花蓮了');
+              await showTyping(900);
+              await sendPeerMsg('他會上來台北搭飛機呀，你搞笑啊');
+              await sendUserMsg('對呀 不過那天我在日本了 線上祝福他');
+              applyStats(-15, 0, +10, '成功用人在日本閃掉情勒飯局！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🤐 簡短回應：在忙找工作中',
+            tag: '冷靜防禦',
+            effectPreview: 'SAN +5 / 寄生度 -5%',
+            action: async () => {
+              await sendUserMsg('還在投履歷面試，這陣子比較忙');
+              await showTyping(800);
+              await sendPeerMsg('行吧 那有空再說');
+              sound.playHit();
+              applyStats(+5, 0, -5, '平靜避開聚會道德綁架。');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 10：早八偽造文書生死劫（李明凱對人頭） */
+      {
+        round: 10,
+        time: '週三 09:49',
+        systemBanner: '⚠️ 李明凱教授站在講台宣布：「全場對人頭！抓到代簽直接當掉送學生懲戒會！」',
+        openingEvents: [
+          { type: 'peer', text: '先幫我簽一下，我人會到的你放心' }
+        ],
+        choices: [
+          {
+            title: '✍️ 心軟幫忙代簽（涉刑法第210條）',
+            tag: '極度危險即死',
+            effectPreview: '學分歸零！觸發 BAD END！',
+            action: async () => {
+              await sendUserMsg('好的');
+              await sendSystemNotice('—— 下午 15:11 孔哥傳訊：「幹完了 剛醒」人根本沒來！ ——');
+              await sendSystemNotice('🚨 李明凱教授現場對名冊當場抓包連坐！');
+              applyStats(-50, -100, +30, '涉刑法第210條偽造私文書！操行大過學分全毀！');
+              triggerEnd('FORGERY');
+            }
+          },
+          {
+            title: '🛑 原則鋼鐵拒絕：「老師盯著對人頭」',
+            tag: '保命正解',
+            effectPreview: '學分維持 100 / SAN +10',
+            action: async () => {
+              await sendUserMsg('老師剛看著點名單對人頭抓代簽，被抓兩個一起當，沒辦法幫，你快過來自己補點');
+              await showTyping(1300);
+              await sendPeerMsg('幾把');
+              await sendPeerMsg('你覺得我這樣他會讓我過嗎');
+              await sendUserMsg('不知道');
+              sound.playHit();
+              applyStats(+10, 0, -10, '守住法律紅線！絕不為巨嬰觸法！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 11：18:08 終極審判日（截圖 1 原版名場面：有的有的全班的認了！） */
+      {
+        round: 11,
+        time: '10月29日 18:08',
+        systemBanner: '⏰ 下課鐘響，孔哥發來終極查核訊息...',
+        openingEvents: [
+          { type: 'peer', text: '啊他最後有點嗎' }
+        ],
+        choices: [
+          {
+            title: '🤷 慌張隱瞞：「好像沒有吧」',
+            tag: '虛假安慰',
+            effectPreview: 'SAN -30 / 巨嬰甩鍋',
+            action: async () => {
+              await sendUserMsg('好像沒有吧');
+              await sendSystemNotice('—— 隔週成績單寄出曠課紀錄 ——');
+              await sendPeerMsg('幹最後有點！你當初還跟我說沒有！');
+              applyStats(-30, 0, +20, '說謊安慰巨嬰，慘遭無情甩鍋！');
+              evaluateFinalEnd();
+            }
+          },
+          {
+            title: '⚡ 沙特式客觀四重擊：有的、有的、全班的',
+            tag: '截圖同款絕殺',
+            effectPreview: 'SAN +40 / 巨嬰徹底認栽 / S級通關',
+            action: async () => {
+              // 第一重擊
+              await sendUserMsg('有的');
+              sound.playHit();
+              await showTyping(900);
+              await sendPeerMsg('他有點到我？');
+              
+              // 第二重擊
+              await sendUserMsg('有的');
+              sound.playHit();
+              await showTyping(900);
+              await sendPeerMsg('他是全班點還是抽點？');
+
+              // 第三重擊（截圖 1 原版！）
+              await sendUserMsg('全班的');
+              sound.playHit();
+              await showTyping(1100);
+
+              // 截圖同款破防認栽
+              await sendPeerMsg('好吧，這我認了');
+
+              // 隔天早餐彩蛋
+              const nextDay = document.createElement('div');
+              nextDay.className = 'text-center my-3 text-[10px] text-neutral-500 font-bold';
+              nextDay.textContent = '10月30日 10:13';
+              dom.chatBox.appendChild(nextDay);
+              await showTyping(900);
+              await sendPeerMsg('陳記？');
+              await sendUserMsg('可以');
+
+              sound.playHit();
+              await sendSystemNotice('💥 巨嬰防線徹底破防，坦然認栽！你瀟灑搭基隆客運下山！');
+              applyStats(+40, 0, -30, '絕殺！用客觀現實重錘敲醒寄生幻想！');
+              evaluateFinalEnd();
+            }
+          }
+        ]
+      }
+    ];
+
+    /* 全域遊戲狀態 */
+    const initialGameState = {
+      san: 100,
+      gpa: 100,
+      parasite: 15,
+      chapterIdx: 0,
+      hongpaoCount: 0,
+      isGameOver: false
+    };
+
+    let state = { ...initialGameState };
+
+    const dom = {
+      chatBox: document.getElementById('chat-box'),
+      choicesContainer: document.getElementById('choices-container'),
+      roundIndicator: document.getElementById('round-indicator'),
+      typingIndicator: document.getElementById('typing-indicator'),
+      valSan: document.getElementById('val-san'),
+      valGpa: document.getElementById('val-gpa'),
+      valParasite: document.getElementById('val-parasite'),
+      toastContainer: document.getElementById('toast-container'),
+      gameoverModal: document.getElementById('gameover-modal'),
+      modalTitle: document.getElementById('modal-title'),
+      modalSubtitle: document.getElementById('modal-subtitle'),
+      modalBadge: document.getElementById('modal-badge'),
+      resRank: document.getElementById('res-rank'),
+      resHongpao: document.getElementById('res-hongpao'),
+      resForgery: document.getElementById('res-forgery'),
+      resQuote: document.getElementById('res-quote'),
+      loreModal: document.getElementById('lore-modal'),
+      btnScrollDown: document.getElementById('btn-scroll-down')
+    };
+
+    function scrollToBottom() {
+      dom.chatBox.scrollTo({ top: dom.chatBox.scrollHeight, behavior: 'smooth' });
+    }
+
+    dom.chatBox.addEventListener('scroll', () => {
+      const nearBottom = dom.chatBox.scrollHeight - dom.chatBox.scrollTop - dom.chatBox.clientHeight < 120;
+      dom.btnScrollDown.classList.toggle('hidden', nearBottom);
+    });
+
+    async function sendSystemNotice(text) {
+      const div = document.createElement('div');
+      div.className = 'text-center my-2 text-[10px] text-neutral-400 font-medium px-4 py-1 bg-[#1a1a1a] rounded-full mx-auto w-fit border border-neutral-800 bubble-anim';
+      div.textContent = text;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 350));
+    }
+
+    async function sendPeerMsg(text, isEdited = false) {
+      sound.playMsgIn();
+      const div = document.createElement('div');
+      div.className = 'flex items-end gap-2 max-w-[85%] bubble-anim';
+      div.innerHTML = `
+        <div class="w-7 h-7 rounded-full overflow-hidden bg-neutral-800 shrink-0 mb-0.5 border border-neutral-700">
+          <img src="avatar.jpg" alt="孔" class="w-full h-full object-cover scale-[1.08]">
+        </div>
+        <div class="flex flex-col">
+          ${isEdited ? '<span class="text-[9px] text-[#a855f7] font-semibold mb-0.5 ml-1">已編輯</span>' : ''}
+          <div class="ig-peer-bubble px-3.5 py-2.5 rounded-2xl rounded-bl-xs text-xs sm:text-[13px] leading-relaxed shadow-sm whitespace-pre-line">
+            ${escapeHtml(text)}
+          </div>
+        </div>
+      `;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 220));
+    }
+
+    async function sendUserMsg(text) {
+      sound.playMsgOut();
+      const div = document.createElement('div');
+      div.className = 'flex justify-end max-w-[85%] ml-auto bubble-anim';
+      div.innerHTML = `
+        <div class="ig-user-bubble px-3.5 py-2 rounded-2xl rounded-br-xs text-xs sm:text-[13px] leading-relaxed shadow-md">
+          ${escapeHtml(text)}
+        </div>
+      `;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 180));
+    }
+
+    async function sendImgMsg(caption) {
+      sound.playMsgOut();
+      const div = document.createElement('div');
+      div.className = 'flex justify-end max-w-[70%] ml-auto bubble-anim';
+      div.innerHTML = `
+        <div class="rounded-2xl overflow-hidden border border-neutral-800 bg-[#262626] p-1.5 shadow-md">
+          <div class="w-44 h-28 bg-gradient-to-br from-indigo-950 via-neutral-900 to-black rounded-xl flex items-center justify-center text-xs text-neutral-300 font-medium border border-neutral-700/60 text-center p-2">
+            ${caption}
+          </div>
+        </div>
+      `;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    async function renderCallCard(title) {
+      sound.playRing();
+      const div = document.createElement('div');
+      div.className = 'flex items-end gap-2 max-w-[85%] bubble-anim';
+      div.innerHTML = `
+        <div class="w-7 h-7 rounded-full overflow-hidden bg-neutral-800 shrink-0 mb-0.5 border border-neutral-700">
+          <img src="avatar.jpg" alt="孔" class="w-full h-full object-cover scale-[1.08]">
+        </div>
+        <div class="bg-[#1f1f1f] border border-neutral-800 rounded-2xl p-3 w-48 text-left space-y-2">
+          <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 rounded-full bg-rose-600/20 text-rose-500 flex items-center justify-center text-xs">
+              📵
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">未接語音通話</div>
+              <div class="text-[9px] text-neutral-400">${title}</div>
+            </div>
+          </div>
+          <button onclick="triggerKongCall()" class="w-full py-1 text-center bg-[#2a2a2a] hover:bg-[#333] text-white rounded-lg text-xs font-medium border border-neutral-700 transition">
+            回電
+          </button>
+        </div>
+      `;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    function showTyping(ms = 900) {
+      dom.typingIndicator.classList.remove('hidden');
+      scrollToBottom();
+      return new Promise(r => setTimeout(() => { dom.typingIndicator.classList.add('hidden'); r(); }, ms));
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    function applyStats(dSan, dGpa, dPar, reason) {
+      if (state.isGameOver) return;
+      state.san = Math.max(0, Math.min(100, state.san + dSan));
+      state.gpa = Math.max(0, Math.min(100, state.gpa + dGpa));
+      state.parasite = Math.max(0, Math.min(100, state.parasite + dPar));
+
+      updateHUD();
+      if (reason) showToast(reason, dSan >= 0 && dGpa >= 0 && dPar <= 0 ? 'good' : 'bad');
+
+      if (state.gpa <= 0) triggerEnd('FORGERY');
+      else if (state.san <= 0) triggerEnd('SENSORY');
+      else if (state.parasite >= 100) triggerEnd('PARASITE');
+    }
+
+    function updateHUD() {
+      dom.valSan.textContent = state.san;
+      dom.valGpa.textContent = state.gpa;
+      dom.valParasite.textContent = `${state.parasite}%`;
+    }
+
+    function showToast(text, type = 'good') {
+      const toast = document.createElement('div');
+      const bg = type === 'good' ? 'bg-[#1a2e1f] text-emerald-300 border-emerald-700' : 'bg-[#2e1a1a] text-rose-300 border-rose-700';
+      toast.className = `float-toast px-3 py-1.5 rounded-full border text-xs font-semibold shadow-xl backdrop-blur ${bg}`;
+      toast.textContent = text;
+      dom.toastContainer.appendChild(toast);
+      setTimeout(() => toast.remove(), 1600);
+    }
+
+    async function startChapter(idx) {
+      if (state.isGameOver) return;
+      if (idx >= CHAPTERS.length) {
+        evaluateFinalEnd();
+        return;
+      }
+
+      state.chapterIdx = idx;
+      const ch = CHAPTERS[idx];
+      dom.roundIndicator.textContent = `第 ${idx + 1}/${CHAPTERS.length} 幕`;
+
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'text-center my-3 text-[10px] text-neutral-500 font-bold';
+      timeDiv.textContent = `${ch.time}`;
+      dom.chatBox.appendChild(timeDiv);
+
+      if (ch.systemBanner) await sendSystemNotice(ch.systemBanner);
+
+      dom.choicesContainer.innerHTML = '<div class="text-center py-2 text-xs text-neutral-500 animate-pulse">孔祥暐正在傳送訊息...</div>';
+
+      for (const ev of ch.openingEvents) {
+        if (state.isGameOver) return;
+        if (ev.type === 'peer') {
+          await showTyping(750);
+          await sendPeerMsg(ev.text, ev.edited);
+        } else if (ev.type === 'call') {
+          await renderCallCard(ev.title);
+        } else if (ev.type === 'call_ended') {
+          const div = document.createElement('div');
+          div.className = 'flex justify-center my-2 text-[11px] text-neutral-400 bg-[#1c1c1e] px-4 py-1.5 rounded-full mx-auto w-fit border border-neutral-800 bubble-anim';
+          div.textContent = ev.title;
+          dom.chatBox.appendChild(div);
+          scrollToBottom();
+          await new Promise(r => setTimeout(r, 250));
+        } else if (ev.type === 'time') {
+          const t = document.createElement('div');
+          t.className = 'text-center my-2 text-[10px] text-neutral-500 font-bold';
+          t.textContent = ev.text;
+          dom.chatBox.appendChild(t);
+        } else if (ev.type === 'sticker') {
+          const st = document.createElement('div');
+          st.className = 'flex justify-start max-w-[85%] bubble-anim mb-1 pl-9';
+          st.innerHTML = `<div class="p-3 bg-[#1f1f1f] rounded-2xl text-2xl border border-neutral-800">🎂</div>`;
+          dom.chatBox.appendChild(st);
+          scrollToBottom();
+          await new Promise(r => setTimeout(r, 300));
+        } else if (ev.type === 'user_img') {
+          await sendImgMsg(ev.text);
+        }
+      }
+
+      if (!state.isGameOver) renderChoices(ch.choices);
+    }
+
+    function renderChoices(choices) {
+      dom.choicesContainer.innerHTML = '';
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left p-2 rounded-xl bg-[#1f1f1f] hover:bg-[#262626] border border-neutral-800 hover:border-neutral-700 transition flex items-center justify-between group active:scale-[0.98]';
+        btn.innerHTML = `
+          <div class="flex-1 pr-2">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="text-xs font-bold text-white group-hover:text-purple-300 transition">${c.title}</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-black/60 text-neutral-400 font-semibold border border-neutral-800">${c.tag}</span>
+            </div>
+            <div class="text-[10px] text-neutral-400">${c.effectPreview}</div>
+          </div>
+          <span class="text-neutral-500 text-xs">➔</span>
+        `;
+        btn.onclick = () => {
+          sound.init();
+          dom.choicesContainer.querySelectorAll('button').forEach(b => b.disabled = true);
+          c.action();
+        };
+        dom.choicesContainer.appendChild(btn);
+      });
+    }
+
+    function nextChapter() {
+      if (state.isGameOver) return;
+      setTimeout(() => {
+        if (!state.isGameOver) startChapter(state.chapterIdx + 1);
+      }, 1000);
+    }
+
+    /* 結局評價系統 */
+    function triggerEnd(type) {
+      if (state.isGameOver) return;
+      state.isGameOver = true;
+      sound.playGameOver();
+      dom.gameoverModal.classList.remove('hidden');
+
+      if (type === 'FORGERY') {
+        applyModal({
+          badge: '⚖️',
+          badgeBg: 'bg-rose-950 text-rose-400 border border-rose-700',
+          title: 'BAD END：偽造文書連坐處分',
+          subtitle: '李明凱教授嚴查現場名冊，你幫孔祥暐代簽當場被抓包！',
+          rank: 'F 級（學分全滅）',
+          forgery: '涉刑法第210條連坐',
+          quote: '「孔哥在被窩睡到下午三點半，而你的操行成績多了一隻大過。」'
+        });
+      } else if (type === 'SENSORY') {
+        applyModal({
+          badge: '😵',
+          badgeBg: 'bg-amber-950 text-amber-400 border border-amber-700',
+          title: 'BAD END：精神休克與耗竭',
+          subtitle: '在連環訊息與電話奪命轟炸下，你的理智值徹底歸零。',
+          rank: 'D 級（耗竭）',
+          forgery: '無力防守',
+          quote: '「看到 IG 跳出孔祥暐訊息都是一種折磨，你連在客運上的平靜都沒了。」'
+        });
+      } else if (type === 'PARASITE') {
+        applyModal({
+          badge: '🍼',
+          badgeBg: 'bg-purple-950 text-purple-400 border border-purple-700',
+          title: 'BAD END：全自動外接器官',
+          subtitle: '孔哥將生活、報告、佔位全面外包給你，你已成為專屬隨行書僮。',
+          rank: 'E 級（永久工具人）',
+          forgery: '任人指使',
+          quote: '「所以確定交給你就好了嗎？ —— 這句話成了你一整學期的詛咒。」'
+        });
+      }
+    }
+
+    function evaluateFinalEnd() {
+      if (state.isGameOver) return;
+      state.isGameOver = true;
+      sound.playVictory();
+      dom.gameoverModal.classList.remove('hidden');
+
+      if (state.san >= 65 && state.parasite <= 20) {
+        applyModal({
+          badge: '👑',
+          badgeBg: 'bg-emerald-950 text-emerald-400 border border-emerald-600',
+          title: 'S 級通關：人間清醒·灰石大宗師',
+          subtitle: '成功抵禦孔哥的所有使喚與外包陷阱，守住學分與主體性！',
+          rank: 'S 級（完美超脫）',
+          forgery: '完全免疫',
+          quote: '「他人即地獄 —— 讓巨嬰的歸巨嬰，你的歸基隆客運與調光台。」'
+        });
+      } else {
+        applyModal({
+          badge: '🛡️',
+          badgeBg: 'bg-sky-950 text-sky-400 border border-sky-600',
+          title: 'A 級通關：穩健及格的通勤客',
+          subtitle: '雖被消耗了些許精力，但守住了原則底線，順利通關。',
+          rank: 'A 級（安全著陸）',
+          forgery: '安全避開',
+          quote: '「不把情緒開關交給巨嬰，是你給自己最大的溫柔。」'
+        });
+      }
+    }
+
+    function applyModal(cfg) {
+      dom.modalBadge.textContent = cfg.badge;
+      dom.modalBadge.className = `w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3 shadow-lg ${cfg.badgeBg}`;
+      dom.modalTitle.textContent = cfg.title;
+      dom.modalSubtitle.textContent = cfg.subtitle;
+      dom.resRank.textContent = cfg.rank;
+      dom.resHongpao.textContent = `${state.hongpaoCount} 次暴擊`;
+      dom.resForgery.textContent = cfg.forgery;
+      dom.resQuote.textContent = cfg.quote;
+    }
+
+    function restartGame() {
+      state = { ...initialGameState };
+      dom.chatBox.innerHTML = '';
+      dom.gameoverModal.classList.add('hidden');
+      updateHUD();
+      sendSystemNotice('—— 新學期啟程：你打開了 Instagram Direct ——');
+      startChapter(0);
+    }
+
+    function openLoreModal() { dom.loreModal.classList.remove('hidden'); }
+    function closeLoreModal() { dom.loreModal.classList.add('hidden'); }
+
+    async function copyReport() {
+      const summary = `【孔祥暐 IG 私訊生存記：我人會到的你放心】
+🏆 結局評價：${dom.modalTitle.textContent}
+🧠 剩餘 SAN 值：${state.san}
+🎓 學分安全度：${state.gpa}
+🦹 巨嬰寄生度：${state.parasite}%
+🍵 大紅袍出招：${state.hongpaoCount} 次
+📜 座右銘：${dom.resQuote.textContent}`;
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(summary);
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = summary;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      showToast('✅ 已複製 IG 戰報到剪貼簿！');
+    }
+
+    window.onload = () => {
+      updateHUD();
+      sendSystemNotice('—— 新學期啟程：你打開了 Instagram Direct ——');
+      startChapter(0);
+    };
+  </script>
+</body>
+</html>
