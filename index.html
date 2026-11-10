@@ -141,7 +141,7 @@
           ⏩ 1x
         </button>
         <button onclick="openChapterModal()" class="px-2 py-0.5 rounded bg-neutral-800 hover:bg-neutral-700 text-[10px] text-neutral-200 font-mono border border-neutral-700 transition flex items-center gap-0.5" title="點擊跳轉章節">
-          <span id="round-indicator">第 1/11 幕</span> ▾
+          <span id="round-indicator">第 1/12 幕</span> ▾
         </button>
       </div>
     </div>
@@ -435,6 +435,8 @@
           <div class="grid grid-cols-1 gap-1.5 text-[11px]">
             <button onclick="playQuote('「先幫我簽一下，我人會到的你放心」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「先幫我簽一下，我人會到的你放心」</button>
             <button onclick="playQuote('「所以確定交給你就好了嗎？」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「所以確定交給你就好了嗎？」</button>
+            <button onclick="playQuote('「已回覆自己：今天吃水餃如何？ 啊要吃嗎」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「已回覆自己：今天吃水餃如何？ 啊要吃嗎」</button>
+            <button onclick="playQuote('「你人勒 過來啊 先來佔位子」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「你人勒 過來啊 先來佔位子」</button>
             <button onclick="playQuote('「都不等的，難過了，所以你要吃自助餐？」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「都不等的，難過了，所以你要吃自助餐？」</button>
             <button onclick="playQuote('「靠北我剛剛是不是按到了 誒誒誒 詹佳文期中到底要搞什麼」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「靠北我剛剛是不是按到了 詹佳文期中到底要搞什麼」</button>
             <button onclick="playQuote('「他是全班點還是抽點？好吧，這我認了」')" class="p-2 rounded-xl bg-black/60 hover:bg-neutral-800 text-left border border-neutral-800 text-neutral-200 transition">💬 「他是全班點還是抽點？好吧，這我認了」</button>
@@ -748,9 +750,76 @@
         ]
       },
 
-      /* 幕 4：深夜奪命語音來電突襲（詹佳文期中） */
+      /* 幕 4：水餃執念「已回覆自己」與「先來佔位子」（全新截圖還原） */
       {
         round: 4,
+        name: '水餃執念與「先來佔位子」',
+        time: '09:34',
+        openingEvents: [
+          { type: 'new_msg_divider' },
+          { type: 'peer', text: '今天吃水餃如何？' },
+          { type: 'time', text: '10:42' },
+          { type: 'peer', text: '你有來嗎' }
+        ],
+        choices: [
+          {
+            title: '🥟 截圖 100% 神還原：家裡吃 ➔ 等下開會 ➔ 沒關係',
+            tag: '截圖原版對話',
+            effectPreview: 'SAN +15 / 寄生度 -10% / 3分鐘前看過',
+            action: async () => {
+              await sendUserMsg('還沒');
+              await showTyping(800);
+              await sendPeerMsg('你早上沒課？');
+              await sendUserMsg('化學課');
+              await showTyping(900);
+              await sendPeerMsg('啊要吃嗎', {
+                replyTo: '今天吃水餃如何？',
+                replySelf: true
+              });
+              await sendUserMsg('家裡吃');
+              await showTyping(750);
+              await sendPeerSticker('capoo_sticker.jpg', '咖波貼圖');
+
+              const time1259 = document.createElement('div');
+              time1259.className = 'text-center my-3 text-[10px] text-neutral-500 font-bold';
+              time1259.textContent = '12:59';
+              dom.chatBox.appendChild(time1259);
+
+              await showTyping(850);
+              await sendPeerMsg('你人勒');
+              await sendUserMsg('另外一間');
+              await showTyping(700);
+              await sendPeerMsg('蛤');
+              await sendUserMsg('隔壁');
+              await showTyping(750);
+              await sendPeerMsg('過來啊');
+              await sendUserMsg('等下開會');
+              await showTyping(850);
+              await sendPeerMsg('先來佔位子');
+              await sendUserMsg('沒關係', { seenText: '3分鐘前看過' });
+              sound.playHit();
+              applyStats(+15, 0, -10, '連你要開會都要你「先來佔位子」！一句「沒關係」瀟灑軟釘子！');
+              nextChapter();
+            }
+          },
+          {
+            title: '🏃 放棄開會過去幫他佔位吃水餃',
+            tag: '佔位工具人',
+            effectPreview: 'SAN -25 / 寄生度 +20%',
+            action: async () => {
+              await sendUserMsg('好 我先過去幫你佔位');
+              await showTyping(800);
+              await sendPeerMsg('水 幫我點 15 顆水餃加酸辣湯');
+              applyStats(-25, 0, +20, '為了幫孔哥佔位差點錯過重要會議！');
+              nextChapter();
+            }
+          }
+        ]
+      },
+
+      /* 幕 5：深夜奪命語音來電突襲（詹佳文期中） */
+      {
+        round: 5,
         name: '深夜奪命來電（詹佳文期中）',
         time: '週三 21:12',
         systemBanner: '📞 週三夜晚，你的手機螢幕突然劇烈震動響起...',
@@ -787,9 +856,9 @@
         ]
       },
 
-      /* 幕 5：期中情報吸血（純德兩性報告 + 3D 蛋糕貼圖） */
+      /* 幕 6：期中情報吸血（純德兩性報告 + 3D 蛋糕貼圖） */
       {
-        round: 5,
+        round: 6,
         name: '純德兩性報告情報白嫖',
         time: '週三 10:13',
         openingEvents: [
@@ -832,9 +901,9 @@
         ]
       },
 
-      /* 幕 6：午餐義大利麵與「12.大紅袍」 */
+      /* 幕 7：午餐義大利麵與「12.大紅袍」 */
       {
-        round: 6,
+        round: 7,
         name: '午餐義大利麵與「12.大紅袍」',
         time: '週四 10:50',
         openingEvents: [
@@ -877,9 +946,9 @@
         ]
       },
 
-      /* 幕 7：責任外包終極陷阱（李明凱期中作業） */
+      /* 幕 8：責任外包終極陷阱（李明凱期中作業） */
       {
-        round: 7,
+        round: 8,
         name: '李明凱期中甩鍋：「確定交給你？」',
         time: '週二 22:17',
         openingEvents: [
@@ -917,9 +986,9 @@
         ]
       },
 
-      /* 幕 8：突發護照個資索取與急件代辦 */
+      /* 幕 9：突發護照個資索取與急件代辦 */
       {
-        round: 8,
+        round: 9,
         name: '護照個資突襲代辦表單',
         time: '週四 11:39',
         openingEvents: [
@@ -957,9 +1026,9 @@
         ]
       },
 
-      /* 幕 9：基哥交換吃飯情勒之「你搞笑啊」 */
+      /* 幕 10：基哥交換吃飯情勒之「你搞笑啊」 */
       {
-        round: 9,
+        round: 10,
         name: '基哥交換情勒：「你搞笑啊」',
         time: '週五 14:30',
         openingEvents: [
@@ -1003,9 +1072,9 @@
         ]
       },
 
-      /* 幕 10：早八偽造文書生死劫（李明凱對人頭） */
+      /* 幕 11：早八偽造文書生死劫（李明凱對人頭） */
       {
-        round: 10,
+        round: 11,
         name: '李明凱點名：偽造文書生死劫',
         time: '週三 09:49',
         systemBanner: '⚠️ 李明凱教授站在講台宣布：「全場對人頭！抓到代簽直接當掉送學生懲戒會！」',
@@ -1043,9 +1112,9 @@
         ]
       },
 
-      /* 幕 11：18:08 終極審判日（有的、有的、全班的、好吧這我認了） */
+      /* 幕 12：18:08 終極審判日（有的、有的、全班的、好吧這我認了） */
       {
-        round: 11,
+        round: 12,
         name: '18:08 終極審判（有的有的全班的）',
         time: '10月29日 18:08',
         systemBanner: '⏰ 下課鐘響，睡到下午的孔哥發來終極查核訊息...',
@@ -1186,11 +1255,12 @@
       await wait(350);
     }
 
-    /* 發送孔哥訊息 (支援「已編輯」與「已回覆你」引用框) */
+    /* 發送孔哥訊息 (支援「已編輯」、「已回覆你」與「已回覆自己」引用框) */
     async function sendPeerMsg(text, opts = {}) {
       sound.playMsgIn();
       const isEdited = typeof opts === 'boolean' ? opts : opts.edited;
       const replyTo = typeof opts === 'object' ? opts.replyTo : null;
+      const replySelf = typeof opts === 'object' ? opts.replySelf : false;
 
       const div = document.createElement('div');
       div.className = 'flex items-end gap-2 max-w-[85%] bubble-anim';
@@ -1200,10 +1270,10 @@
         </div>
         <div class="flex flex-col">
           ${replyTo ? `
-            <span class="text-[10px] text-neutral-400 mb-1 ml-1">已回覆你</span>
+            <span class="text-[10px] text-neutral-400 mb-1 ml-1">${replySelf ? '已回覆自己' : '已回覆你'}</span>
             <div class="flex items-stretch mb-1 ml-1">
               <div class="w-0.5 bg-neutral-600 rounded-full mr-2"></div>
-              <div class="ig-quote-user px-3 py-1.5 rounded-2xl text-[11px] opacity-90 line-clamp-2">${escapeHtml(replyTo)}</div>
+              <div class="${replySelf ? 'ig-peer-bubble border border-neutral-800 text-neutral-300' : 'ig-quote-user'} px-3 py-1.5 rounded-2xl text-[11px] opacity-90 line-clamp-2">${escapeHtml(replyTo)}</div>
             </div>
           ` : ''}
           ${isEdited ? '<span class="text-[9px] text-[#a855f7] font-semibold mb-0.5 ml-1">已編輯</span>' : ''}
@@ -1220,17 +1290,37 @@
       await wait(220);
     }
 
-    /* 發送玩家訊息 */
-    async function sendUserMsg(text) {
-      sound.playMsgOut();
+    /* 發送孔哥貼圖 (帶頭像，例如咖波貼圖) */
+    async function sendPeerSticker(src, altText = '貼圖') {
+      sound.playMsgIn();
       const div = document.createElement('div');
-      div.className = 'flex justify-end max-w-[85%] ml-auto bubble-anim';
+      div.className = 'flex items-end gap-2 max-w-[85%] bubble-anim';
+      div.innerHTML = `
+        <div class="w-7 h-7 rounded-full overflow-hidden bg-neutral-800 shrink-0 mb-0.5 border border-neutral-700">
+          <img src="avatar.jpg" alt="孔" class="w-full h-full object-cover scale-[1.08]">
+        </div>
+        <div onclick="openLightbox('${src}', '${altText}')" class="cursor-zoom-in">
+          <img src="${src}" alt="${altText}" class="w-24 h-20 rounded-2xl object-contain bg-white/95 p-1 border border-neutral-800 shadow">
+        </div>
+      `;
+      dom.chatBox.appendChild(div);
+      scrollToBottom();
+      await wait(240);
+    }
+
+    /* 發送玩家訊息 (支援下方「3分鐘前看過」已讀標記) */
+    async function sendUserMsg(text, opts = {}) {
+      sound.playMsgOut();
+      const seenText = opts && opts.seenText ? opts.seenText : null;
+      const div = document.createElement('div');
+      div.className = 'flex flex-col items-end max-w-[85%] ml-auto bubble-anim';
       div.innerHTML = `
         <div class="relative">
           <div class="msg-bubble ig-user-bubble px-3.5 py-2 rounded-2xl rounded-br-xs text-xs sm:text-[13px] leading-relaxed shadow-md">
             ${escapeHtml(text)}
           </div>
         </div>
+        ${seenText ? `<span class="text-[10px] text-neutral-400 mt-1 mr-0.5 select-none">${escapeHtml(seenText)}</span>` : ''}
       `;
       dom.chatBox.appendChild(div);
       bindBubbleReaction(div.querySelector('.msg-bubble'));
@@ -1410,6 +1500,13 @@
           dom.chatBox.appendChild(div);
           scrollToBottom();
           await wait(250);
+        } else if (ev.type === 'new_msg_divider') {
+          const div = document.createElement('div');
+          div.className = 'flex items-center gap-3 my-2 text-[10px] text-neutral-500 select-none';
+          div.innerHTML = `<div class="flex-1 h-px bg-neutral-800"></div><span>新訊息</span><div class="flex-1 h-px bg-neutral-800"></div>`;
+          dom.chatBox.appendChild(div);
+          scrollToBottom();
+          await wait(200);
         } else if (ev.type === 'time') {
           const t = document.createElement('div');
           t.className = 'text-center my-2 text-[10px] text-neutral-500 font-bold';
